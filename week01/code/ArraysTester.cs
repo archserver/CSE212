@@ -1,3 +1,5 @@
+using System.Reflection;
+
 public static class ArraysTester {
     /// <summary>
     /// Entry point for the tests
@@ -39,7 +41,17 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        // Declare the Array to hold the double
+        var lv_retval = new double [length] ;
+        // iterate the for by the length parameter,
+        // multiplying the number by the iteration
+        for (int i=1; i <= length; i++)
+        {
+            lv_retval[i-1] = number * i;
+        }
+
+        // return the array
+        return lv_retval; // replace this return statement with your own
     }
     
     /// <summary>
@@ -56,6 +68,33 @@ public static class ArraysTester {
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+        // Declare Array the holder for the shift
+        var number_holder = new int[data.Count];
+
+        // use the pointer for the length of of the incoming data to shift to the right based on the amount
+
+        if (amount >= 1 )
+        {
+            for (int i = 0; i <= data.Count-1 ; i++)
+            {
+                if (i + amount >= data.Count)
+                {
+                    number_holder[i + amount - data.Count] = data[i];
+                }
+                else
+                {
+                    number_holder[i + amount] = data[i];
+                }
+            }
+
+            // rewrite to pointer
+            for (int i = 0 ; i < data.Count; i++)
+            {
+                data[i] = number_holder[i];
+            }
+        }
+        // could have done a stagger step move with multiple for loops but wanted to try and go through the array once instead of multiple times moving each time
 
     }
 }
