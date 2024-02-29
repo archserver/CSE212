@@ -44,7 +44,7 @@ public static class ArraysTester {
         // Declare the Array to hold the double
         var lv_retval = new double [length] ;
         // iterate the for by the length parameter,
-        // multiplying the number by the iteration
+        // assign the return value index iterator -1 the multiple of the number by the iteration
         for (int i=1; i <= length; i++)
         {
             lv_retval[i-1] = number * i;
@@ -69,10 +69,12 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        // Declare Array the holder for the shift
+        // Declare Array the holder for the shift from the parameter data
         var number_holder = new int[data.Count];
 
-        // use the pointer for the length of of the incoming data to shift to the right based on the amount
+        // check for positive ammount in length
+        // loop through data pointer, move value to number_holder basaed on if index check itirator + amount <= pointer count to assing number holder with index of iterator + ammount - pinter data count to pointer data at index iterator
+        // else number holder iterator + amount is the pointer data at the iterator 
 
         if (amount >= 1 )
         {
