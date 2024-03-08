@@ -15,7 +15,8 @@
         // Console.WriteLine(players);    // This can be un-commented out for debug help
         while (players.Length > 0)
             players.GetNextPerson();
-        // Defect(s) Found: 
+        // Defect(s) Found:   Enqueue     had Insert instead( 0, person) of Add(person) this added the individual to the beginning of the list.
+    
 
         Console.WriteLine("---------");
 
@@ -56,7 +57,7 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found: would skip Tim becasuse his value was 0 modified to turns to be -99 if the initial valie was 0 , also added a check if >= 1 to a <=-99 to just add it back on. 
 
         Console.WriteLine("---------");
 
@@ -73,7 +74,7 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found: Modified code to take any initial value of 0 or less to become -99
 
         Console.WriteLine("---------");
 
@@ -83,6 +84,6 @@
         Console.WriteLine("Test 5");
         players = new TakingTurnsQueue();
         players.GetNextPerson();
-        // Defect(s) Found:
+        // Defect(s) Found: NA
     }
 }
