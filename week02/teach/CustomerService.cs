@@ -3,7 +3,8 @@
 /// added and allows customers to be serviced.
 /// </summary>
 public class CustomerService {
-    public static void Run() {
+    public static void Run()
+    {
         // Example code to see what's in the customer service queue:
         // var cs = new CustomerService(10);
         // Console.WriteLine(cs);
@@ -11,24 +12,53 @@ public class CustomerService {
         // Test Cases
 
         // Test 1
-        // Scenario: 
-        // Expected Result: 
-        Console.WriteLine("Test 1");
+        // Scenario: Queue size less than 1 should default to 10
+        // Expected Result: Queue size = 10
 
-        // Defect(s) Found: 
+        Console.WriteLine("Test 1");
+        var cs = new CustomerService(-5);
+        Console.WriteLine($"Queue should be 10: {cs}");
+
+        // Defect(s) Found: No Defect
 
         Console.WriteLine("=================");
 
         // Test 2
-        // Scenario: 
-        // Expected Result: 
+        // Scenario: AddNewCustomer should add a customer to the queue and if queue is full it should display an error 
+        // Expected Result: Customers added once but as size is 2 it should give us an error stating "Maximum Number of Customers in Queue."
         Console.WriteLine("Test 2");
+        cs = new CustomerService(2);
 
-        // Defect(s) Found: 
+        cs.AddNewCustomer();
+        Console.WriteLine("Customer Added Once");
+        cs.AddNewCustomer();
+        Console.WriteLine("Customer Added Twice");
+        cs.AddNewCustomer();
+        // should error because we are adding more customers past queue size
+
+        // Defect(s) Found: queue count comparison was > should be >=
 
         Console.WriteLine("=================");
 
         // Add more Test Cases As Needed Below
+        // Test 3
+        // Scenario: ServeCustomer should serve the next customer from the queue and display details, if queue is empty it should display an error
+        // Expected Result: Customers removed twice but as size is 2 it should give us an error stating "Maximum Number of Customers in Queue."
+        Console.WriteLine("Test 3");
+        cs = new CustomerService(2);
+        cs.AddNewCustomer();
+        cs.AddNewCustomer();
+        Console.WriteLine($"customer being served {cs}");
+        cs.ServeCustomer();
+        Console.WriteLine($"Removed one customer being served {cs}");
+        cs.ServeCustomer();
+        Console.WriteLine($"Removed two customer being served {cs}");
+        cs.ServeCustomer();
+        // should error as we are removine more customers then we have
+
+        // Defect(s) Found: 
+
+        Console.WriteLine("=================");
     }
 
     private readonly List<Customer> _queue = new();
@@ -67,7 +97,9 @@ public class CustomerService {
     /// </summary>
     private void AddNewCustomer() {
         // Verify there is room in the service queue
-        if (_queue.Count > _maxSize) {
+        //if(_queue.Count >= _maxSize)
+        if (_queue.Count >= _maxSize)
+        {
             Console.WriteLine("Maximum Number of Customers in Queue.");
             return;
         }
@@ -88,9 +120,20 @@ public class CustomerService {
     /// Dequeue the next customer and display the information.
     /// </summary>
     private void ServeCustomer() {
-        _queue.RemoveAt(0);
+       
+        if (_queue.Count <= 0)
+            Console.WriteLine("No Customers in Queue.");
+        else
+        {
+            var customer = _queue[0];
+            Console.WriteLine(customer);
+            _queue.RemoveAt(0);
+        }
+        
+
+        /*_queue.RemoveAt(0);
         var customer = _queue[0];
-        Console.WriteLine(customer);
+        Console.WriteLine(customer);*/
     }
 
     /// <summary>
