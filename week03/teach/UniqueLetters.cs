@@ -10,18 +10,27 @@
         Console.WriteLine(AreUniqueLetters(test3)); // Expect True because its an empty string
     }
 
+    // A set is perfect for this because it can only contain one of any item put into it
+    // split the strings into characters, add eacharacter to the to the set stoping if a duplicate is encountered. 
+
     /// <summary>Determine if there are any duplicate letters in the text provided</summary>
     /// <param name="text">Text to check for duplicate letters</param>
     /// <returns>true if all letters are unique, otherwise false</returns>
-    private static bool AreUniqueLetters(string text) {
+    private static bool AreUniqueLetters(string text)
+    {
         // TODO Problem 1 - Replace the O(n^2) algorithm to use sets and O(n) efficiency
-        for (var i = 0; i < text.Length; ++i) {
-            for (var j = 0; j < text.Length; ++j) {
-                // Don't want to compare to yourself ... that will always result in a match
-                if (i != j && text[i] == text[j])
-                    return false;
-            }
-        }
+        /* for (var i = 0; i < text.Length; ++i) {
+             for (var j = 0; j < text.Length; ++j) {
+                 // Don't want to compare to yourself ... that will always result in a match
+                 if (i != j && text[i] == text[j])
+                     return false;
+             }
+         }*/
+        var char_List = new HashSet<char>();
+
+        foreach (char c in text)
+            if (!char_List.Add(c))
+                return false;
 
         return true;
     }

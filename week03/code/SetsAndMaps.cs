@@ -1,4 +1,6 @@
+using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Windows.Markup;
 
 public static class SetsAndMaps
 {
@@ -22,7 +24,34 @@ public static class SetsAndMaps
     public static string[] FindPairs(string[] words)
     {
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        // create hashset
+        // create a return of pairs array with 1/2 the count of words
+        // run through each set of two digit characters in the list of words
+        // add the items only once
+        // retrieve the opposing annogram
+        // compare to make sure they are not identical for duplicate characters and there is an opposing match
+        // add pairs to the pairs array
+
+        var items = new HashSet<string>();
+        var pairs = new string[(int)words.Length / 2];
+        var count = 0;
+
+        foreach (var two_didit in words)
+        {
+            if (items.Add(two_didit))
+            {
+                string opposing = two_didit[1].ToString() + two_didit[0].ToString();
+                if (opposing != two_didit && items.Contains(opposing))
+                {
+                    pairs[count++] += (two_didit + " & " + opposing);
+                }
+
+                items.Add(two_didit);
+            }
+        }
+
+        Array.Resize(ref pairs, count);
+        return pairs;
     }
 
     /// <summary>
@@ -39,10 +68,17 @@ public static class SetsAndMaps
     public static Dictionary<string, int> SummarizeDegrees(string filename)
     {
         var degrees = new Dictionary<string, int>();
+
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            // retrieve the degree and count them adding to the value of each match
+            var degree = fields[3];
+            if (degrees.ContainsKey(degree))
+                degrees[degree]++;
+            else
+                degrees[degree] = 1;
         }
 
         return degrees;
@@ -67,7 +103,36 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Trim the spaces from the words
+        // Count the length of the strings if they are != return False
+        // else Build two dictionarys, sort the dictionarys compare letters if different return false
+        // at the end return true 
+
+        var firstWord = word1.ToUpper().Replace(" ","").Trim();
+        var secondWord = word2.ToUpper().Replace(" ","").Trim();
+
+        if (firstWord.Length != secondWord.Length)
+            return false;
+
+        var letterCounter = new Dictionary<char, int>();
+
+        foreach (var c in firstWord)
+        {
+            if (letterCounter.ContainsKey(c))
+                letterCounter[c]++;
+            else
+                letterCounter[c] = 1;
+        }
+
+        foreach (var d in secondWord)
+        {
+            if (!letterCounter.ContainsKey(d) || letterCounter[d] == 0)
+                return false;
+
+            letterCounter[d]--;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -101,6 +166,30 @@ public static class SetsAndMaps
         // on those classes so that the call to Deserialize above works properly.
         // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
         // 3. Return an array of these string descriptions.
-        return [];
+
+        // Define list of events array
+        // run through each event in the the retreived JSON file
+        // if there are no properties in an  event return
+        // grab the location and trhe magnitude converting to a formatted string
+        // create the string of a single event thenn add it to the list of eventsa
+        // when conmpleted return the event list AS AN ARRAY
+        var eventList = new List<string>();
+
+        foreach (var feature in featureCollection.Features)
+        {
+            var properties = feature.Properties;
+            if (properties == null)
+                continue;
+
+            // grab place and magnitude
+            string location = properties.Place;
+            string magnitude = properties.Mag.HasValue ? properties.Mag.Value.ToString("0.0") : "N/A";
+
+            string singleEvent = $"{location} - Mag {magnitude}";
+            eventList.Add(singleEvent);
+        }
+
+        return eventList.ToArray();
+        
     }
 }

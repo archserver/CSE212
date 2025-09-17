@@ -1,4 +1,7 @@
-﻿public class DuplicateCounter
+﻿using System.ComponentModel;
+using System.Net.WebSockets;
+
+public class DuplicateCounter
 {
     //Count how many duplicates are in a collection of data.
 
@@ -24,7 +27,16 @@
 
     private static int CountDuplicates(int[] data)
     {
-        // Add code here.
-        return 0;
+        var number_List = new HashSet<int>();
+        var duplicate_Counter = 0;
+
+        foreach (var numb in data)
+        {
+            if (number_List.Contains(numb))
+                duplicate_Counter++;
+            else
+                number_List.Add(numb);
+        }
+        return duplicate_Counter;
     }
 }
