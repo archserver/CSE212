@@ -1,4 +1,8 @@
 using System.Collections;
+using System.ComponentModel.DataAnnotations;
+using System.Net.Security;
+using Microsoft.VisualBasic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 public static class Recursion
 {
@@ -14,8 +18,10 @@ public static class Recursion
     /// </summary>
     public static int SumSquaresRecursive(int n)
     {
-        // TODO Start Problem 1
-        return 0;
+        if (n <= 0)
+            return 0;
+        // call it self n-1 adding the square of itself
+        return n * n + SumSquaresRecursive(n - 1);
     }
 
     /// <summary>
@@ -39,7 +45,19 @@ public static class Recursion
     /// </summary>
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
-        // TODO Start Problem 2
+        // make sure the work size matches the desired length if not keep going or exit
+        if (word.Length == size)
+            results.Add(word);
+        else
+        {
+            // step through each letter removing the current letter which is primary then calling the function for the remaning letters
+            for (var i = 0; i < letters.Length; i++)
+            {
+                var lettersLeft = letters.Remove(i, 1);
+
+                PermutationsChoose(results, lettersLeft, size, word + letters[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -86,6 +104,10 @@ public static class Recursion
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
+        // create ther dictionary
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
+
         // Base Cases
         if (s == 0)
             return 0;
@@ -96,10 +118,17 @@ public static class Recursion
         if (s == 3)
             return 4;
 
-        // TODO Start Problem 3
+        // look to see if this number of steps has been solved before
+        if (remember.ContainsKey(s))
+            return remember[s];
+
 
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+
+        // save steps into memory;
+        remember[s] = ways;
+
         return ways;
     }
 
@@ -118,7 +147,25 @@ public static class Recursion
     /// </summary>
     public static void WildcardBinary(string pattern, List<string> results)
     {
-        // TODO Start Problem 4
+        // if pattern length == 0 return I do not like that it has to return a result 0 size list should be acceptrable, bad expectation in my oppinion
+        if (pattern.Length == 0)
+        {
+            results.Add(pattern);
+            return;
+        }
+
+        // check for an occurance of wildcard else return pattern
+        var index = pattern.IndexOf('*');
+        if (index == -1)
+        {
+            results.Add(pattern);
+            return;
+        }
+        // replace each occurance with both the 1 and 0 
+        WildcardBinary(pattern.Remove(index, 1).Insert(index, '0'.ToString()), results);
+
+        WildcardBinary(pattern.Remove(index, 1).Insert(index, '1'.ToString()), results);
+
     }
 
     /// <summary>
@@ -129,15 +176,36 @@ public static class Recursion
     {
         // If this is the first time running the function, then we need
         // to initialize the currPath list.
-        if (currPath == null) {
+        if (currPath == null)
+        {
             currPath = new List<ValueTuple<int, int>>();
         }
-        
+
         // currPath.Add((1,2)); // Use this syntax to add to the current path
 
-        // TODO Start Problem 5
-        // ADD CODE HERE
+        currPath.Add((x, y));
 
+        // check to see if we can move one of the 4 directions right x+1, left x-1, down y+1 or up y-1
+        // because of testing order have to do down and up first then left and right
+        // because the list is a pointer each call needs its own list to revert the pointer back for 
+        // multiple valid paths that do not start at 0,0
+        if (maze.IsValidMove(currPath, x, y + 1)) // Move Down
+            SolveMaze(results, maze, x, y + 1, new List<(int, int)>(currPath));
+        if (maze.IsValidMove(currPath, x, y - 1)) // Move up
+            SolveMaze(results, maze, x, y - 1, new List<(int, int)>(currPath));
+        if (maze.IsValidMove(currPath, x + 1, y)) // Move Right
+            SolveMaze(results, maze, x + 1, y, new List<(int, int)>(currPath));
+        if (maze.IsValidMove(currPath, x - 1, y)) // Move Left
+            SolveMaze(results, maze, x - 1, y, new List<(int, int)>(currPath));
+
+        // check to see if we are at the end
+        if (maze.IsEnd(x, y))
+        {
+            results.Add(currPath.AsString());
+            //            currPath.Clear();  // only if using pointers and path can not split past 0,0
+            //            currPath.Add((0, 0));  // only if using pointers and path can not split past 0,0
+            return;
+        }
         // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
     }
 }
