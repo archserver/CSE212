@@ -40,7 +40,7 @@ public class Node
         
         if (value < Data)
         {
-            // Insert to the left
+            // Check to the left
             if (Left is null)
                 return false;
             else
@@ -48,30 +48,32 @@ public class Node
         }
         else if (value > Data)
         {
-            // Insert to the right
+            // Check the right
             if (Right is null)
                 return false;
             else
                 foundIt = Right.Contains(value);
         }
-
+        // if = return trye
         if (value == Data || foundIt)
         {
             return true;
         }
-
+        // otherwise return the value of foundit
         return foundIt;
     }
 
     public int GetHeight()
     {
+        // start with 1 checking left and right independantly
         int lheight = 1, rheight = 1;
+
         if (Left is not null)
             lheight += Left.GetHeight();
 
         if (Right is not null)
             rheight += Right.GetHeight();
-
+        // return the highest using Max
         return Math.Max(lheight, rheight);
     }
 }
