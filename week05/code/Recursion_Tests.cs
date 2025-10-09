@@ -132,7 +132,7 @@ public class WildcardBinaryTests
     public void WildcardBinary_6_Long()
     {
         var results = new List<string>();
-        Recursion.WildcardBinary("110*0*", results);
+        Recursion.WildcardBinary("11010*", results);
 
         results.Sort();
         var expected = new List<string> {

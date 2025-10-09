@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 public class Node
 {
     public int Data { get; set; }
@@ -11,7 +13,8 @@ public class Node
 
     public void Insert(int value)
     {
-        // TODO Start Problem 1
+        // Eliminaet the possibility of duplicates by checking both > and < otherwise skip
+        
 
         if (value < Data)
         {
@@ -21,7 +24,7 @@ public class Node
             else
                 Left.Insert(value);
         }
-        else
+        else if(value > Data)
         {
             // Insert to the right
             if (Right is null)
@@ -33,13 +36,42 @@ public class Node
 
     public bool Contains(int value)
     {
-        // TODO Start Problem 2
-        return false;
+        bool foundIt = false;
+        
+        if (value < Data)
+        {
+            // Insert to the left
+            if (Left is null)
+                return false;
+            else
+              foundIt = Left.Contains(value);
+        }
+        else if (value > Data)
+        {
+            // Insert to the right
+            if (Right is null)
+                return false;
+            else
+                foundIt = Right.Contains(value);
+        }
+
+        if (value == Data || foundIt)
+        {
+            return true;
+        }
+
+        return foundIt;
     }
 
     public int GetHeight()
     {
-        // TODO Start Problem 4
-        return 0; // Replace this line with the correct return statement(s)
+        int lheight = 1, rheight = 1;
+        if (Left is not null)
+            lheight += Left.GetHeight();
+
+        if (Right is not null)
+            rheight += Right.GetHeight();
+
+        return Math.Max(lheight, rheight);
     }
 }
